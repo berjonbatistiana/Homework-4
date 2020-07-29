@@ -1,7 +1,7 @@
 // Container for all quiz items
 const quizItems = [
     {
-        question: 'Who is the instructor for the UCB Bootcamp Part-time June 2020 class?',
+        question: 'Who is the instructor for the UCB SF Bootcamp Part-time June 2020 class?',
         choices: ['Amanda Crawford', 'Emmanuel Jucaban', 'Kit Te'],
         answer: 1
     },
@@ -23,7 +23,7 @@ const quizItems = [
     },
 
     {
-        question: 'In computer programming, which logica gate outputs TRUE if both inputs are TRUE?',
+        question: 'In computer programming, which logical gate outputs TRUE if both inputs are TRUE?',
         choices: ['OR', 'AND', 'NOR'],
         answer: 1
     }
@@ -34,14 +34,25 @@ const leaderBoard = [];
 
 const progressPerQuestion = 100/quizItems.length;
 
+const timer = 300;
+
 let progress = 0;
 let sessionScore = 0;
 let currentQuestion = 0;
+let remainingTime = 300;
 
 // Gathering essential html elements
+let $titleScreen = document.querySelector('.quiz-title-screen');
+let $quizScreen = document.querySelector('.quiz-container');
+
 let $questionPrompt = document.querySelector(".question");
+
 let $answerButtons = document.querySelectorAll(".answer-btn");
+
+let $startQuizButton = document.getElementById('start-quiz');
 let $submitAnswerButton = document.getElementById("answer-next");
+
+let $questionTimerText = document.querySelector('.question-header > h4');
 let $progressBar = document.querySelector(".progress-bar");
 
 // Object quizResult
@@ -57,13 +68,32 @@ function initializeQuiz() {
     currentQuestion = 0;
     let item = quizItems[0];
     $questionPrompt.textContent = item.question;
-
+    
     item.choices.forEach((answer, i) => {
         $answerButtons[i].textContent = answer;
     });
+    
+    $titleScreen.hidden = false;
+}
+
+// switches the container to the first question and initializes the timer
+function startQuiz(){
+    remainingTime = timer;
+    $questionTimerText.textContent = remainingTime;
+    $titleScreen.hidden = true;
+    $quizScreen.hidden = false;
+
+    let quizTimer = setInterval(()=>{
+        $questionTimerText.textContent = --remainingTime;
+        if (remainingTime <= 0){
+            clearInterval(quizTimer);
+            endQuiz(true);
+        }
+    }, 1000);
 }
 
 // checks if there is a next question, then proceeds if not
+// this is where we edit the question and the answers to display on to the html
 function nextQuestion() {
 
     progress+=parseInt(progressPerQuestion);
@@ -81,16 +111,17 @@ function nextQuestion() {
 
         });
     }
-    $submitAnswerButton.setAttribute('disabled', '');
 }
 
 
-function endQuiz() {
+function endQuiz(isTimesUp = false) {
+    $submitAnswerButton.setAttribute('disabled', '');
     // modal to let user enter their name
     // initialize quiz
     console.log(`end score ${sessionScore}`);
 }
 
+// we add an event listener for each of the answer buttons for indicating which is the selected answer
 $answerButtons.forEach(element => {
     element.addEventListener('click', x => {
         let me = x.target;
@@ -100,9 +131,17 @@ $answerButtons.forEach(element => {
         me.style.backgroundColor = "#64a973";
         me.setAttribute("selected", "");
         $submitAnswerButton.removeAttribute("disabled");
-    })
+    });
 });
 
+// starts the quiz
+$startQuizButton.addEventListener('click', () => {
+    startQuiz();
+});
+
+
+// submits the selected answer and moves on to the next question
+// this is also where we deduct time when the answer is wrong
 $submitAnswerButton.addEventListener('click', () => {
 
     let answer = quizItems[currentQuestion].answer;
@@ -110,9 +149,16 @@ $submitAnswerButton.addEventListener('click', () => {
     let isCorrect = $userAnswer.hasAttribute('selected');
 
     if (isCorrect) {
+        document.querySelector('.correct-indicator').hidden = false;
+        document.querySelector('.wrong-indicator').hidden = true;
         sessionScore++;
+    } else {
+        document.querySelector('.correct-indicator').hidden = true;
+        document.querySelector('.wrong-indicator').hidden = false;
+        $questionTimerText.textContent = (remainingTime-=10);
     }
     nextQuestion();
 });
 
+// run this when the page loads for the first time
 initializeQuiz();

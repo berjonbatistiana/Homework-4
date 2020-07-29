@@ -44,9 +44,17 @@
       </div>
     </nav>
 
+    <!-- Container: Start quiz screen -->
+    <div class="quiz-title-screen rounded bg-light">
+        <h1 class="instruction">
+            Try to answer the following questions within the time limit! Keep in mind that incorrect answers will penalize your score time by 10 seconds! Click the button below to start.
+        </h1>
+        <button type="button" id="start-quiz" class="btn btn-primary">Start Quiz!</button>
+    </div>
 
     <!-- Container: Question and answers -->
-    <div class="quiz-container rounded bg-light">
+    <div class="quiz-container rounded bg-light" hidden>
+        <div class="question-header text-muted"><h4 class="text-muted"></h4></div>
         <div id="quiz-item">
             <h1 class="question"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates officia reprehenderit eligendi sapiente! Amet iste asperiores porro beatae illo nihil?</h1>
             <p class="question-footer">Select an answer from below:</p>
@@ -56,11 +64,15 @@
                 <button type="button" id="0" class="answer-btn btn btn-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, fugit.</button>
                 <button type="button" id="1" class="answer-btn btn btn-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, excepturi?</button>
                 <button type="button" id="2" class="answer-btn btn btn-dark">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit, dolores.</button>
+                <p class="text-danger wrong-indicator" hidden>Wrong!</p>
+                <p class="text-success correct-indicator" hidden>Correct!</p>
                 <button type="button" id="answer-next" class="btn btn-primary" disabled>Next</button>
             </div>
         </div>
     </div>
 
+    <!-- Container: Input name for leaderboards -->
+    <div class="quiz-finished rounded bg-light" hidden></div>
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
