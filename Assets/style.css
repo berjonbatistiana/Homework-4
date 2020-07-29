@@ -27,6 +27,10 @@ html, body {
     bottom: 1px;
 }
 
+.progress-bar{
+    width: 0.5%;
+}
+
 .quiz-container {
     margin: 0 140px;
     padding: 50px 50px 25px 50px;
@@ -50,7 +54,7 @@ html, body {
     flex-direction: column;
 }
 
-.answer-next {
+#answer-next {
     width: auto !important;
     align-self: flex-end;
 }
