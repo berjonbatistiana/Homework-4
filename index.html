@@ -80,11 +80,11 @@
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
               fugit.
             </button>
-            <button type="button" id="2" class="answer-btn btn btn-dark">
+            <button type="button" id="1" class="answer-btn btn btn-dark">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit,
               dolores.
             </button>
-            <button type="button" id="1" class="answer-btn btn btn-dark">
+            <button type="button" id="2" class="answer-btn btn btn-dark">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae,
               excepturi?
             </button>
@@ -107,8 +107,9 @@
     <div class="quiz-result rounded bg-light" hidden>
       <div class="quiz-message">
         <h3 class="quiz-result-prompt">
-          Thank you for participating in this quiz.
+          Thank you for participating in this quiz!
         </h3>
+        <h3 id="quiz-result-score"></h3>
         <h5 class="quiz-result-message"></h5>
       </div>
       <form class="form">
@@ -139,14 +140,6 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Highscores</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
           </div>
           <div class="modal-body leaderboards-container">
             <table class="leaderboard-table table thead-light table-striped">
@@ -170,7 +163,7 @@
             >
               Back
             </button>
-            <button type="button" class="btn btn-danger">Clear All</button>
+            <button type="button" class="btn btn-danger clear-leader">Clear All</button>
           </div>
         </div>
       </div>

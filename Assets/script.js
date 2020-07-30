@@ -30,23 +30,7 @@ const quizItems = [
 ];
 
 // Container for the leaderboard, will contain an array of quizResults
-const leaderBoard = [
-    {
-        name: 'bb',
-        score: '3',
-        time: '300'
-    },
-    {
-        name: 'aa',
-        score: '5',
-        time: '30'
-    },
-    {
-        name: 'cc',
-        score: '2',
-        time: '30'
-    }
-];
+const leaderBoard = [];
 
 // Progress bar modifier
 const progressPerQuestion = 100 / quizItems.length;
@@ -71,15 +55,18 @@ let $textLeaderName = document.getElementById('user-initials-input');
 
 let $questionTimerText = document.querySelector('.question-header > h4');
 let $quizResultMessage = document.querySelector('.quiz-result-message');
+let $quizResultScore = document.getElementById('quiz-result-score');
+
 let $progressBar = document.querySelector(".progress-bar");
 
 let $leaderboardButton = document.querySelector('.leaderboard-button');
 let $leaderboardBody = document.querySelector('.leaderboard-body');
+let $leaderboardClearButton = document.querySelector('.clear-leader');
 
 let $form = document.querySelectorAll(".form");
 
 // Quiz variables
-const timer = 3;
+const timer = 300;
 let quizTimer; // Declaration of quizTimer to be used in two functions
 let remainingTime = 300;
 let progress = 0;
@@ -87,8 +74,6 @@ let sessionScore = 0;
 let currentQuestion = 0;
 let timesUpMessage = "Time's up!";
 let finishedMessage = 'You have reached the end of the quiz!';
-let quizResultMessage = `Your score is ${sessionScore}/${quizItems.length}`;
-
 
 // Object quizResult
 function quizResult(name = 'noname', score, time) {
@@ -118,7 +103,18 @@ function displayResults() {             //|
 }                                       //|
 // display toggles, end __________________|
 
+// TODO: Import and export leader from local
+function importLeaderFromLocal(){
+
+}
+
+function exportLeadertoLocal(){
+
+}
+
+// sort leaderboard
 function sortLeaderByScore(){
+    // import leader from local
     leaderBoard.sort((a,b) => {
         if (parseInt(a.score) > parseInt(b.score)) {
             return -1;
@@ -129,6 +125,13 @@ function sortLeaderByScore(){
         }
     });
 }
+
+// clear leaderboard 
+function clearLeaderboard(){
+    //clear leader from local
+    leaderBoard.length = 0;
+}
+
 
 // Re-initialize quiz, run when doing another quiz
 function initializeQuiz() {
@@ -186,6 +189,7 @@ function nextQuestion() {
 function endQuiz(isTimesUp = false) {
     clearInterval(quizTimer);
     $quizResultMessage.textContent = finishedMessage;
+    $quizResultScore.textContent = `Your score is ${sessionScore}/${quizItems.length}`;
     if (isTimesUp) {
         $quizResultMessage.textContent = timesUpMessage;
     }
@@ -210,6 +214,14 @@ function renderLeader(leader) {
     $leaderboardBody.appendChild($leaderRecordEl);
 }
 
+function renderLeaderTable(){
+    $leaderboardBody.innerHTML = '';
+    sortLeaderByScore();
+    leaderBoard.forEach(element => {
+        renderLeader(element);
+    });
+}
+
 
 // -------- Event Listeners --------
 
@@ -224,8 +236,9 @@ $form.forEach(element => {
 $answerButtons.forEach(element => {
     element.addEventListener('click', e => {
         let me = e.target;
-        $answerButtons.forEach(x => {
-            e.style.backgroundColor = "#343a40"; x.removeAttribute("selected");
+        $answerButtons.forEach(button => { // reset buttons before highlighting another one
+            button.style.backgroundColor = "#343a40"; 
+            button.removeAttribute("selected");
         });
         me.style.backgroundColor = "#64a973";
         me.setAttribute("selected", "");
@@ -242,6 +255,7 @@ $startQuizButton.addEventListener('click', e => {
 // submits the selected answer and moves on to the next question
 // this is also where we deduct time when the answer is wrong
 $submitAnswerButton.addEventListener('click', () => {
+
     let answer = quizItems[currentQuestion].answer;
     let $userAnswer = document.getElementById(`${answer}`);
     let isCorrect = $userAnswer.hasAttribute('selected');
@@ -267,12 +281,14 @@ $submitLeaderboard.addEventListener('click', () => {
 });
 
 $leaderboardButton.addEventListener('click', () => {
-    $leaderboardBody.innerHTML = '';
-    sortLeaderByScore();
-    leaderBoard.forEach(element => {
-        renderLeader(element);
-    });
+    renderLeaderTable();
 });
+
+$leaderboardClearButton.addEventListener('click', () => {
+    clearLeaderboard();
+    renderLeaderTable();
+});
+
 // run this when the page loads for the first time
 initializeQuiz();
 displayTitle();
