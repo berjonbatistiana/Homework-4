@@ -12,7 +12,7 @@ const quizItems = [
     },
     {
         question: 'Which cartoon family lives in "742 Evergreen Terrace, Springfield, USA"?',
-        choices:['The Simpsons (The Simpsons)', 'The Griffins (Family Guy)', 'The Smiths (Rick and Morty)'],
+        choices: ['The Simpsons (The Simpsons)', 'The Griffins (Family Guy)', 'The Smiths (Rick and Morty)'],
         answer: 0
     },
 
@@ -30,20 +30,35 @@ const quizItems = [
 ];
 
 // Container for the leaderboard, will contain an array of quizResults
-const leaderBoard = [];
+const leaderBoard = [
+    {
+        name: 'bb',
+        score: '3',
+        time: '300'
+    },
+    {
+        name: 'aa',
+        score: '5',
+        time: '30'
+    },
+    {
+        name: 'cc',
+        score: '2',
+        time: '30'
+    }
+];
 
-const progressPerQuestion = 100/quizItems.length;
+// Progress bar modifier
+const progressPerQuestion = 100 / quizItems.length;
 
-const timer = 300;
-
-let progress = 0;
-let sessionScore = 0;
-let currentQuestion = 0;
-let remainingTime = 300;
 
 // Gathering essential html elements
+// const $leaderHeaders = "<tr><th>Initials</th><th>Score</th><th>Time</th></tr>"
+
 let $titleScreen = document.querySelector('.quiz-title-screen');
 let $quizScreen = document.querySelector('.quiz-container');
+let $resultsScreen = document.querySelector('.quiz-result');
+let $leaderboardScreen = document.querySelector('.leaderboard-container');
 
 let $questionPrompt = document.querySelector(".question");
 
@@ -51,14 +66,68 @@ let $answerButtons = document.querySelectorAll(".answer-btn");
 
 let $startQuizButton = document.getElementById('start-quiz');
 let $submitAnswerButton = document.getElementById("answer-next");
+let $submitLeaderboard = document.getElementById('add-leader');
+let $textLeaderName = document.getElementById('user-initials-input');
 
 let $questionTimerText = document.querySelector('.question-header > h4');
+let $quizResultMessage = document.querySelector('.quiz-result-message');
 let $progressBar = document.querySelector(".progress-bar");
 
+let $leaderboardButton = document.querySelector('.leaderboard-button');
+let $leaderboardBody = document.querySelector('.leaderboard-body');
+
+let $form = document.querySelectorAll(".form");
+
+// Quiz variables
+const timer = 3;
+let quizTimer; // Declaration of quizTimer to be used in two functions
+let remainingTime = 300;
+let progress = 0;
+let sessionScore = 0;
+let currentQuestion = 0;
+let timesUpMessage = "Time's up!";
+let finishedMessage = 'You have reached the end of the quiz!';
+let quizResultMessage = `Your score is ${sessionScore}/${quizItems.length}`;
+
+
 // Object quizResult
-function quizResult(name, score) {
+function quizResult(name = 'noname', score, time) {
     this.name = name;
     this.score = score;
+    this.time = time;
+}
+// ------ functions -------
+
+// --- display toggles, start ------------|
+function displayQuiz() {                //|
+    $resultsScreen.hidden = true;       //|
+    $titleScreen.hidden = true;         //|
+    $quizScreen.hidden = false;         //|
+}                                       //|
+                                        //|
+function displayTitle() {               //|
+    $resultsScreen.hidden = true;       //|
+    $quizScreen.hidden = true;          //|
+    $titleScreen.hidden = false;        //|
+}                                       //|
+                                        //|
+function displayResults() {             //|
+    $titleScreen.hidden = true;         //|
+    $quizScreen.hidden = true;          //|
+    $resultsScreen.hidden = false;      //|
+}                                       //|
+// display toggles, end __________________|
+
+function sortLeaderByScore(){
+    leaderBoard.sort((a,b) => {
+        if (parseInt(a.score) > parseInt(b.score)) {
+            return -1;
+        } else if (parseInt(a.score) < parseInt(b.score)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
 }
 
 // Re-initialize quiz, run when doing another quiz
@@ -68,25 +137,23 @@ function initializeQuiz() {
     currentQuestion = 0;
     let item = quizItems[0];
     $questionPrompt.textContent = item.question;
-    
+
     item.choices.forEach((answer, i) => {
         $answerButtons[i].textContent = answer;
     });
-    
-    $titleScreen.hidden = false;
+
 }
 
 // switches the container to the first question and initializes the timer
-function startQuiz(){
+function startQuiz() {
     remainingTime = timer;
     $questionTimerText.textContent = remainingTime;
-    $titleScreen.hidden = true;
-    $quizScreen.hidden = false;
 
-    let quizTimer = setInterval(()=>{
+    displayQuiz();
+
+    quizTimer = setInterval(() => {
         $questionTimerText.textContent = --remainingTime;
-        if (remainingTime <= 0){
-            clearInterval(quizTimer);
+        if (remainingTime < 0) {
             endQuiz(true);
         }
     }, 1000);
@@ -96,7 +163,7 @@ function startQuiz(){
 // this is where we edit the question and the answers to display on to the html
 function nextQuestion() {
 
-    progress+=parseInt(progressPerQuestion);
+    progress += parseInt(progressPerQuestion);
     $progressBar.style.width = progress + '%';
 
     if (++currentQuestion > quizItems.length - 1) {
@@ -111,22 +178,54 @@ function nextQuestion() {
 
         });
     }
-}
-
-
-function endQuiz(isTimesUp = false) {
     $submitAnswerButton.setAttribute('disabled', '');
-    // modal to let user enter their name
-    // initialize quiz
-    console.log(`end score ${sessionScore}`);
+
 }
+
+// displays results
+function endQuiz(isTimesUp = false) {
+    clearInterval(quizTimer);
+    $quizResultMessage.textContent = finishedMessage;
+    if (isTimesUp) {
+        $quizResultMessage.textContent = timesUpMessage;
+    }
+    displayResults();
+}
+
+// render an entry in the leaderboard
+function renderLeader(leader) {
+    let $leaderRecordEl = document.createElement('tr');
+    let $leaderNameEl = document.createElement('td');
+    let $leaderScoreEl = document.createElement('td');
+    let $leaderTimeEl = document.createElement('td');
+
+    $leaderNameEl.textContent = leader.name;
+    $leaderScoreEl.textContent = leader.score;
+    $leaderTimeEl.textContent = leader.time;
+
+    $leaderRecordEl.appendChild($leaderNameEl);
+    $leaderRecordEl.appendChild($leaderScoreEl);
+    $leaderRecordEl.appendChild($leaderTimeEl);
+    
+    $leaderboardBody.appendChild($leaderRecordEl);
+}
+
+
+// -------- Event Listeners --------
+
+// disable forms default event
+$form.forEach(element => {
+    element.addEventListener('submit', e => {
+        e.preventDefault();
+    });
+});
 
 // we add an event listener for each of the answer buttons for indicating which is the selected answer
 $answerButtons.forEach(element => {
-    element.addEventListener('click', x => {
-        let me = x.target;
+    element.addEventListener('click', e => {
+        let me = e.target;
         $answerButtons.forEach(x => {
-            x.style.backgroundColor = "#343a40"; x.removeAttribute("selected");
+            e.style.backgroundColor = "#343a40"; x.removeAttribute("selected");
         });
         me.style.backgroundColor = "#64a973";
         me.setAttribute("selected", "");
@@ -135,7 +234,7 @@ $answerButtons.forEach(element => {
 });
 
 // starts the quiz
-$startQuizButton.addEventListener('click', () => {
+$startQuizButton.addEventListener('click', e => {
     startQuiz();
 });
 
@@ -143,7 +242,6 @@ $startQuizButton.addEventListener('click', () => {
 // submits the selected answer and moves on to the next question
 // this is also where we deduct time when the answer is wrong
 $submitAnswerButton.addEventListener('click', () => {
-
     let answer = quizItems[currentQuestion].answer;
     let $userAnswer = document.getElementById(`${answer}`);
     let isCorrect = $userAnswer.hasAttribute('selected');
@@ -155,10 +253,26 @@ $submitAnswerButton.addEventListener('click', () => {
     } else {
         document.querySelector('.correct-indicator').hidden = true;
         document.querySelector('.wrong-indicator').hidden = false;
-        $questionTimerText.textContent = (remainingTime-=10);
+        $questionTimerText.textContent = (remainingTime -= 10);
     }
     nextQuestion();
 });
 
+// store the quiz results into an array to be put into local storage
+$submitLeaderboard.addEventListener('click', () => {
+    leaderBoard.push(new quizResult($textLeaderName.value, sessionScore, remainingTime));
+    // TODO: put into local storage
+    initializeQuiz();
+    displayTitle();
+});
+
+$leaderboardButton.addEventListener('click', () => {
+    $leaderboardBody.innerHTML = '';
+    sortLeaderByScore();
+    leaderBoard.forEach(element => {
+        renderLeader(element);
+    });
+});
 // run this when the page loads for the first time
 initializeQuiz();
+displayTitle();

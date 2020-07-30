@@ -1,86 +1,111 @@
-html, body {
-    height: 100%;
-    margin: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.leader-header th {
+    border-top: 0 !important;
 }
 
 .background-image {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    z-index: -1;
-    background-image: url(./quizbg.jpg);
-    background-size: cover;
-    background-color: white;
-    opacity: .4;
-    
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  background-image: url(./quizbg.jpg);
+  background-size: cover;
+  background-color: white;
+  opacity: 0.4;
 }
 
 .quiz-header {
-    height: 135px;;
+  height: 135px;
 }
 
-#quiz-progress{
-    height: 2px;
-    width: 99%;
-    margin: auto;
-    position: relative;
-    bottom: 1px;
+#quiz-progress {
+  height: 2px;
+  width: 99%;
+  margin: auto;
+  position: relative;
+  bottom: 1px;
 }
 
-.progress-bar{
-    width: 0.5%;
+.progress-bar {
+  width: 0.5%;
 }
 
-.quiz-container, .quiz-title-screen, .quiz-finished {
-    margin: 0 140px;
-    padding: 25px 50px 25px 50px;
+.quiz-container,
+.quiz-title-screen,
+.quiz-result {
+  margin: 0 140px;
+  padding: 25px 50px 25px 50px;
 }
 
-.question, .instruction{
-    font-weight: 300;
-    font-size: 35px;
+.question,
+.instruction {
+  font-weight: 300;
+  font-size: 35px;
 }
 
-.instruction{
-    text-align: center;
-    margin-bottom: 25px;
+.instruction {
+  text-align: center;
+  margin-bottom: 25px;
 }
 
 #start-quiz {
-    display: flex;
-    margin: auto;
+  display: flex;
+  margin: auto;
 }
 
-.question-header{
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: flex-end;
+.question-header {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.question-footer{
-    margin-top: 25px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: gray;
-
+.question-footer {
+  margin-top: 25px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: gray;
 }
 
 .answers {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 #answer-next {
-    width: auto !important;
-    align-self: flex-end;
+  width: auto !important;
+  align-self: flex-end;
 }
 
 .answers > .btn {
-    width: 75%;
-    margin-bottom: 15px;
-    text-align: left;
+  width: 75%;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
-.correct-indicator, .wrong-indicator {
+.correct-indicator,
+.wrong-indicator {
+  margin: 0;
+}
+
+.leaderboard-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz-result-message {
+    font-weight: 300;
+}
+
+#user-initials-input {
+    width: 60%;
+}
+
+.user-initials-label {
     margin: 0;
 }

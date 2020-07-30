@@ -28,7 +28,13 @@
           <h1 class="display-4">Quiz Time!</h1>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">Leaderboard</a>
+          <a
+            href="#"
+            class="nav-link leaderboard-button"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+            >Leaderboard</a
+          >
         </li>
       </ul>
 
@@ -45,39 +51,136 @@
     </nav>
 
     <!-- Container: Start quiz screen -->
-    <div class="quiz-title-screen rounded bg-light">
-        <h1 class="instruction">
-            Try to answer the following questions within the time limit! Keep in mind that incorrect answers will penalize your score time by 10 seconds! Click the button below to start.
-        </h1>
-        <button type="button" id="start-quiz" class="btn btn-primary">Start Quiz!</button>
+    <div class="quiz-title-screen rounded bg-light" hidden>
+      <h1 class="instruction">
+        Try to answer the following questions within the time limit! Keep in
+        mind that incorrect answers will penalize your score time by 10 seconds!
+        Click the button below to start.
+      </h1>
+      <button type="button" id="start-quiz" class="btn btn-primary">
+        Start Quiz!
+      </button>
     </div>
 
     <!-- Container: Question and answers -->
     <div class="quiz-container rounded bg-light" hidden>
-        <div class="question-header text-muted"><h4 class="text-muted"></h4></div>
-        <div id="quiz-item">
-            <h1 class="question"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates officia reprehenderit eligendi sapiente! Amet iste asperiores porro beatae illo nihil?</h1>
-            <p class="question-footer">Select an answer from below:</p>
-        </div>
-        <div id="quiz-answers">
-            <div class="answers">
-                <button type="button" id="0" class="answer-btn btn btn-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, fugit.</button>
-                <button type="button" id="1" class="answer-btn btn btn-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, excepturi?</button>
-                <button type="button" id="2" class="answer-btn btn btn-dark">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit, dolores.</button>
-                <p class="text-danger wrong-indicator" hidden>Wrong!</p>
-                <p class="text-success correct-indicator" hidden>Correct!</p>
-                <button type="button" id="answer-next" class="btn btn-primary" disabled>Next</button>
-            </div>
-        </div>
+      <div class="question-header text-muted"><h4 class="text-muted"></h4></div>
+      <div id="quiz-item">
+        <h1 class="question">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
+          officia reprehenderit eligendi sapiente! Amet iste asperiores porro
+          beatae illo nihil?
+        </h1>
+        <p class="question-footer">Select an answer from below:</p>
+      </div>
+      <div id="quiz-answers">
+        <form class="form">
+          <div class="answers">
+            <button type="button" id="0" class="answer-btn btn btn-dark">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
+              fugit.
+            </button>
+            <button type="button" id="2" class="answer-btn btn btn-dark">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit,
+              dolores.
+            </button>
+            <button type="button" id="1" class="answer-btn btn btn-dark">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae,
+              excepturi?
+            </button>
+            <p class="text-danger wrong-indicator" hidden>Wrong!</p>
+            <p class="text-success correct-indicator" hidden>Correct!</p>
+            <button
+              type="button"
+              id="answer-next"
+              class="btn btn-primary"
+              disabled
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- Container: Input name for leaderboards -->
-    <div class="quiz-finished rounded bg-light" hidden></div>
+    <div class="quiz-result rounded bg-light" hidden>
+      <div class="quiz-message">
+        <h3 class="quiz-result-prompt">
+          Thank you for participating in this quiz.
+        </h3>
+        <h5 class="quiz-result-message"></h5>
+      </div>
+      <form class="form">
+        <div class="leaderboard-entry">
+          <input
+            type="text"
+            name="user-initials"
+            id="user-initials-input"
+            placeholder="Enter your initials..."
+          />
+          <button type="button" id="add-leader" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal: Leaderboard -->
+    <div
+      class="modal fade"
+      id="exampleModalCenter"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Highscores</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body leaderboards-container">
+            <table class="leaderboard-table table thead-light table-striped">
+              <thead class="leader-header">
+                <tr>
+                  <th>Initials</th>
+                  <th>Score</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody class="leaderboard-body">
+
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Back
+            </button>
+            <button type="button" class="btn btn-danger">Clear All</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- My JS -->
     <script src="./Assets/script.js"></script>
   </body>
