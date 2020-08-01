@@ -31,6 +31,7 @@ const quizItems = [
 
 // Container for the leaderboard, will contain an array of quizResults
 const leaderBoard = [];
+const leaderboardLocalKey = 'leaderboard';
 
 // Progress bar modifier
 const progressPerQuestion = 100 / quizItems.length;
@@ -103,18 +104,29 @@ function displayResults() {             //|
 }                                       //|
 // display toggles, end __________________|
 
-// TODO: Import and export leader from local
+// Import and export leader from local
 function importLeaderFromLocal(){
-
+    let newLeader = JSON.parse(localStorage.getItem(leaderboardLocalKey));
+    leaderBoard.length = 0;
+    newLeader.forEach(element => {
+        leaderBoard.push(element)
+    });
 }
 
 function exportLeadertoLocal(){
-
+    localStorage.setItem(leaderboardLocalKey, JSON.stringify(leaderBoard));
 }
+
+// clear leaderboard 
+function clearLeaderboard(){
+    leaderBoard.length = 0;
+    exportLeadertoLocal();
+}
+
 
 // sort leaderboard
 function sortLeaderByScore(){
-    // import leader from local
+    importLeaderFromLocal();
     leaderBoard.sort((a,b) => {
         if (parseInt(a.score) > parseInt(b.score)) {
             return -1;
@@ -126,25 +138,34 @@ function sortLeaderByScore(){
     });
 }
 
-// clear leaderboard 
-function clearLeaderboard(){
-    //clear leader from local
-    leaderBoard.length = 0;
-}
-
-
 // Re-initialize quiz, run when doing another quiz
 function initializeQuiz() {
     progress = 0;
     sessionScore = 0;
     currentQuestion = 0;
     let item = quizItems[0];
+    $progressBar.style.width =  '0.5%';
     $questionPrompt.textContent = item.question;
 
+    clearChoices();
     item.choices.forEach((answer, i) => {
         $answerButtons[i].textContent = answer;
     });
 
+}
+
+function clearChoices(){
+    let item = quizItems[currentQuestion];
+        $questionPrompt.textContent = item.question;
+
+        item.choices.forEach((answer, i) => {
+            $answerButtons[i].textContent = answer;
+            $answerButtons[i].style.backgroundColor = "#343a40";
+
+        });
+        
+        document.querySelector('.correct-indicator').hidden = true;
+        document.querySelector('.wrong-indicator').hidden = true;
 }
 
 // switches the container to the first question and initializes the timer
@@ -172,14 +193,7 @@ function nextQuestion() {
     if (++currentQuestion > quizItems.length - 1) {
         endQuiz();
     } else {
-        let item = quizItems[currentQuestion];
-        $questionPrompt.textContent = item.question;
-
-        item.choices.forEach((answer, i) => {
-            $answerButtons[i].textContent = answer;
-            $answerButtons[i].style.backgroundColor = "#343a40";
-
-        });
+        clearChoices();
     }
     $submitAnswerButton.setAttribute('disabled', '');
 
@@ -272,10 +286,11 @@ $submitAnswerButton.addEventListener('click', () => {
     nextQuestion();
 });
 
-// store the quiz results into an array to be put into local storage
+// new leader is added to the board and is saved into the local storage.
 $submitLeaderboard.addEventListener('click', () => {
     leaderBoard.push(new quizResult($textLeaderName.value, sessionScore, remainingTime));
-    // TODO: put into local storage
+    exportLeadertoLocal();
+    $leaderboardButton.click();
     initializeQuiz();
     displayTitle();
 });
