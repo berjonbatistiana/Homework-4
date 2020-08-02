@@ -90,13 +90,13 @@ function displayQuiz() {                //|
     $titleScreen.hidden = true;         //|
     $quizScreen.hidden = false;         //|
 }                                       //|
-                                        //|
+//|
 function displayTitle() {               //|
     $resultsScreen.hidden = true;       //|
     $quizScreen.hidden = true;          //|
     $titleScreen.hidden = false;        //|
 }                                       //|
-                                        //|
+//|
 function displayResults() {             //|
     $titleScreen.hidden = true;         //|
     $quizScreen.hidden = true;          //|
@@ -105,7 +105,7 @@ function displayResults() {             //|
 // display toggles, end __________________|
 
 // Import and export leader from local
-function importLeaderFromLocal(){
+function importLeaderFromLocal() {
     let newLeader = JSON.parse(localStorage.getItem(leaderboardLocalKey));
     leaderBoard.length = 0;
     newLeader.forEach(element => {
@@ -113,21 +113,21 @@ function importLeaderFromLocal(){
     });
 }
 
-function exportLeadertoLocal(){
+function exportLeadertoLocal() {
     localStorage.setItem(leaderboardLocalKey, JSON.stringify(leaderBoard));
 }
 
 // clear leaderboard 
-function clearLeaderboard(){
+function clearLeaderboard() {
     leaderBoard.length = 0;
     exportLeadertoLocal();
 }
 
 
 // sort leaderboard
-function sortLeaderByScore(){
+function sortLeaderByScore() {
     importLeaderFromLocal();
-    leaderBoard.sort((a,b) => {
+    leaderBoard.sort((a, b) => {
         if (parseInt(a.score) > parseInt(b.score)) {
             return -1;
         } else if (parseInt(a.score) < parseInt(b.score)) {
@@ -144,28 +144,33 @@ function initializeQuiz() {
     sessionScore = 0;
     currentQuestion = 0;
     let item = quizItems[0];
-    $progressBar.style.width =  '0.5%';
+    $progressBar.style.width = '0.5%';
     $questionPrompt.textContent = item.question;
 
     clearChoices();
+    clearAnswerIndicator();
     item.choices.forEach((answer, i) => {
         $answerButtons[i].textContent = answer;
     });
 
 }
 
-function clearChoices(){
+function clearChoices() {
     let item = quizItems[currentQuestion];
-        $questionPrompt.textContent = item.question;
+    $questionPrompt.textContent = item.question;
 
-        item.choices.forEach((answer, i) => {
-            $answerButtons[i].textContent = answer;
-            $answerButtons[i].style.backgroundColor = "#343a40";
+    item.choices.forEach((answer, i) => {
+        $answerButtons[i].textContent = answer;
+        $answerButtons[i].style.backgroundColor = "#343a40";
 
-        });
-        
-        document.querySelector('.correct-indicator').hidden = true;
-        document.querySelector('.wrong-indicator').hidden = true;
+    });
+
+
+}
+
+function clearAnswerIndicator() {
+    document.querySelector('.correct-indicator').hidden = true;
+    document.querySelector('.wrong-indicator').hidden = true;
 }
 
 // switches the container to the first question and initializes the timer
@@ -224,11 +229,11 @@ function renderLeader(leader) {
     $leaderRecordEl.appendChild($leaderNameEl);
     $leaderRecordEl.appendChild($leaderScoreEl);
     $leaderRecordEl.appendChild($leaderTimeEl);
-    
+
     $leaderboardBody.appendChild($leaderRecordEl);
 }
 
-function renderLeaderTable(){
+function renderLeaderTable() {
     $leaderboardBody.innerHTML = '';
     sortLeaderByScore();
     leaderBoard.forEach(element => {
@@ -251,7 +256,7 @@ $answerButtons.forEach(element => {
     element.addEventListener('click', e => {
         let me = e.target;
         $answerButtons.forEach(button => { // reset buttons before highlighting another one
-            button.style.backgroundColor = "#343a40"; 
+            button.style.backgroundColor = "#343a40";
             button.removeAttribute("selected");
         });
         me.style.backgroundColor = "#64a973";
