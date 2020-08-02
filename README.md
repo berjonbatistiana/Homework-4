@@ -4,12 +4,12 @@ The homework task is to create a quiz using javscript. It should generate html e
 
 Below are screenshots of the homework from the project
 
-![Screenshot 1](./screenshots/ss1)
-![Screenshot 2](./screenshots/ss2)
-![Screenshot 3](./screenshots/ss3)
-![Screenshot 4](./screenshots/ss4)
+![Screenshot 1](./Assets/screenshots/ss1.png)
+![Screenshot 2](./Assets/screenshots/ss2.png)
+![Screenshot 3](./Assets/screenshots/ss3.png)
+![Screenshot 4](./Assets/screenshots/ss4.png)
 
 This link goes to the live version of the homework.
 
-![Live homework](https://berjonbatistiana.github.io/Homework-3/)
+[Live homework](https://berjonbatistiana.github.io/Homework-4/)
 
